@@ -57,6 +57,7 @@ def retrieve_arxiv_data(target_categories, start_date, per_page=100, sleep_timeo
                 arxiv_papers.append({
                     'Authors': [y.text for y in x.findall('./author/', namespaces={None: 'http://www.w3.org/2005/Atom'})],
                     'Title': clean_wrapped_text(x.find('./title', namespaces={None: 'http://www.w3.org/2005/Atom'}).text),
+                    'Link': clean_wrapped_text(x.find('./id', namespaces={None: 'http://www.w3.org/2005/Atom'}).text),
                     'Updated': clean_wrapped_text(x.find('./updated', namespaces={None: 'http://www.w3.org/2005/Atom'}).text[:10]),
                     'Published': clean_wrapped_text(x.find('./published', namespaces={None: 'http://www.w3.org/2005/Atom'}).text[:10]),
                     'Categories': cats,
@@ -89,7 +90,7 @@ def markdown_text(arxiv_papers, category_lookups, start_date, end_date):
     for paper in sorted(arxiv_papers, key=lambda d: d['Published'], reverse=True):
         if start_date <= paper['Updated'] and end_date > paper['Updated']:
             category_papers.append(paper)
-            text_output.append(f"### {paper['Title']}")
+            text_output.append(f"### [{paper['Title']}]({paper['Link']})")
             text_output.append(f"**Authors**: {', '.join(paper['Authors'])}")
             text_output.append(f"**Categories**: {', '.join([category_lookups[c] for c in paper['Categories'] if c in category_lookups])}")
             text_output.append(f"**PDF**: {paper['Pdf Link']}")
