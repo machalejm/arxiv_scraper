@@ -10,6 +10,4 @@ TARGET_CATEGORIES = {
     "q-fin.GN",
     "q-fin.MF",
     #"q-fin.EC",
-    #"math.ST",
-    #"math.PR",
 }
